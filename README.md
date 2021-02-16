@@ -77,4 +77,4 @@ No Modules.
 
 | Name | Description |
 |------|-------------|
-| role\_arn | n/a |
+| role\_arn | Amazon Resource Name |
