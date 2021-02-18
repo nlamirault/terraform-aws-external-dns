@@ -71,5 +71,3 @@ resource "aws_iam_role_policy_attachment" "external_dns" {
   role       = aws_iam_role.external_dns.name
   policy_arn = aws_iam_policy.external_dns_permissions.arn
 }
-
-
