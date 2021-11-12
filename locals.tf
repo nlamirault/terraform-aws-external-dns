@@ -14,4 +14,15 @@
 
 locals {
   service_name = format("%s-external-dns", var.cluster_name)
+
+  role_name = "external-dns"
+
+  tags = merge(
+    var.tags,
+    {
+      "Made-By" = "terraform"
+      "Service" = "external-dns"
+      "Iam"     = "eks-external-dns"
+    }
+  )
 }
