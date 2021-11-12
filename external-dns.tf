@@ -12,31 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-data "aws_iam_policy_document" "assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-    effect  = "Allow"
-
-    condition {
-      test     = "StringEquals"
-      variable = "${replace(data.aws_secretsmanager_secret_version.oidc_url.secret_binary, "https://", "")}:sub"
-      values   = [format("system:serviceaccount:%s:%s", var.namespace, var.service_account)]
-    }
-
-    principals {
-      identifiers = [data.aws_secretsmanager_secret_version.oidc_arn.secret_binary]
-      type        = "Federated"
-    }
-  }
-}
-
-resource "aws_iam_role" "external_dns" {
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
-  name               = local.service_name
-  tags               = var.tags
-}
-
-data "aws_iam_policy_document" "external_dns_permissions" {
+data "aws_iam_policy_document" "dns" {
   statement {
     effect = "Allow"
     actions = [
@@ -60,14 +36,31 @@ data "aws_iam_policy_document" "external_dns_permissions" {
   }
 }
 
-resource "aws_iam_policy" "external_dns_permissions" {
+resource "aws_iam_policy" "dns" {
   name        = local.service_name
   path        = "/"
   description = "Permissions for External-DNS on Route53"
-  policy      = data.aws_iam_policy_document.external_dns_permissions.json
+  policy      = data.aws_iam_policy_document.dns.json
+  tags = merge(
+    { "Name" = format("%s", local.service_name) },
+    local.tags
+  )
 }
 
-resource "aws_iam_role_policy_attachment" "external_dns" {
-  role       = aws_iam_role.external_dns.name
-  policy_arn = aws_iam_policy.external_dns_permissions.arn
+module "external_dns_role" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version = "4.7.0"
+
+  create_role      = true
+  role_description = "Role for External DNS"
+  role_name        = local.role_name
+  provider_url     = data.aws_eks_cluster.this.identity[0].oidc[0].issuer
+  role_policy_arns = [
+    aws_iam_policy.dns.arn
+  ]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:${var.namespace}:${var.service_account}"]
+  tags = merge(
+    { "Name" = local.role_name },
+    local.tags
+  )
 }

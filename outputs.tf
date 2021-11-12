@@ -13,6 +13,6 @@
 # limitations under the License.
 
 output "role_arn" {
-  value       = element(aws_iam_role.external_dns.*.arn, 0)
+  value       = module.external_dns_role.iam_role_arn
   description = "Amazon Resource Name"
 }

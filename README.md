@@ -50,18 +50,17 @@ service_account = "external-dns"
 
 ## Modules
 
-No Modules.
+| Name | Source | Version |
+|------|--------|---------|
+| external_dns_role | terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc | 4.7.0 |
 
 ## Resources
 
 | Name |
 |------|
+| [aws_eks_cluster](https://registry.terraform.io/providers/hashicorp/aws/3.26.0/docs/data-sources/eks_cluster) |
 | [aws_iam_policy](https://registry.terraform.io/providers/hashicorp/aws/3.26.0/docs/resources/iam_policy) |
 | [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/3.26.0/docs/data-sources/iam_policy_document) |
-| [aws_iam_role](https://registry.terraform.io/providers/hashicorp/aws/3.26.0/docs/resources/iam_role) |
-| [aws_iam_role_policy_attachment](https://registry.terraform.io/providers/hashicorp/aws/3.26.0/docs/resources/iam_role_policy_attachment) |
-| [aws_secretsmanager_secret](https://registry.terraform.io/providers/hashicorp/aws/3.26.0/docs/data-sources/secretsmanager_secret) |
-| [aws_secretsmanager_secret_version](https://registry.terraform.io/providers/hashicorp/aws/3.26.0/docs/data-sources/secretsmanager_secret_version) |
 
 ## Inputs
 
