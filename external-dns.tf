@@ -49,7 +49,7 @@ resource "aws_iam_policy" "dns" {
 
 module "external_dns_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "4.13.1"
+  version = "4.13.2"
 
   create_role      = true
   role_description = "Role for External DNS"
