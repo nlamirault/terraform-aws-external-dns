@@ -30,6 +30,8 @@ data "aws_iam_policy_document" "dns" {
       "route53:ListHostedZones",
       "route53:ListResourceRecordSets"
     ]
+
+    #tfsec:ignore:aws-iam-no-policy-wildcards
     resources = [
       "*"
     ]
